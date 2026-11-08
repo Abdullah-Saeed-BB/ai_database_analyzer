@@ -5,8 +5,8 @@ import { Mail, Lock, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@ad.min");
+  const [password, setPassword] = useState("admin");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -25,7 +25,7 @@ export default function LoginForm() {
 
     try {
       const response = await fetch(`${API_URL}/api/users/login`, {
-        method: "POST", 
+        method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
@@ -39,7 +39,10 @@ export default function LoginForm() {
         if (response.status === 401 || response.status === 403) {
           setError("Invalid email or password. Please try again.");
         } else {
-          setError(data.message || "An error occurred on the server. Please try again later.");
+          setError(
+            data.message ||
+              "An error occurred on the server. Please try again later.",
+          );
         }
         setLoading(false);
         return;
@@ -50,7 +53,7 @@ export default function LoginForm() {
         const token = data.access_token || data.token;
         document.cookie = `jwt_token=${token}; path=/`;
         setSuccess(true);
-        
+
         // Redirect after a short delay
         setTimeout(() => {
           window.location.href = "/dashboard";
@@ -61,7 +64,9 @@ export default function LoginForm() {
       }
     } catch (err) {
       // 4. Handling network or unexpected errors
-      setError("Unable to connect to the server. Please check your internet connection.");
+      setError(
+        "Unable to connect to the server. Please check your internet connection.",
+      );
       setLoading(false);
     }
   };
@@ -69,8 +74,12 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md p-8 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 animate-in fade-in zoom-in duration-500">
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-text-primary tracking-tight mb-2">Welcome Back</h1>
-        <p className="text-text-secondary">Please enter your details to sign in</p>
+        <h1 className="text-3xl font-bold text-text-primary tracking-tight mb-2">
+          Welcome Back
+        </h1>
+        <p className="text-text-secondary">
+          Please enter your details to sign in
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -86,12 +95,16 @@ export default function LoginForm() {
         {success && (
           <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-2xl animate-in slide-in-from-top-2 duration-300">
             <CheckCircle2 className="w-5 h-5 shrink-0" />
-            <p className="text-sm font-medium">Login successful! Redirecting...</p>
+            <p className="text-sm font-medium">
+              Login successful! Redirecting...
+            </p>
           </div>
         )}
 
         <div className="space-y-2">
-          <label htmlFor="email" className="text-sm font-semibold text-text-primary ml-1">
+          <label
+            htmlFor="email"
+            className="text-sm font-semibold text-text-primary ml-1">
             Email Address
           </label>
           <div className="relative group">
@@ -111,7 +124,9 @@ export default function LoginForm() {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="password" className="text-sm font-semibold text-text-primary ml-1">
+          <label
+            htmlFor="password"
+            className="text-sm font-semibold text-text-primary ml-1">
             Password
           </label>
           <div className="relative group">
@@ -133,8 +148,7 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={loading || success}
-          className="w-full py-4 px-6 bg-bg-active text-white font-bold rounded-2xl shadow-lg shadow-text-active/30 hover:shadow-xl hover:shadow-text-active/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2"
-        >
+          className="w-full py-4 px-6 bg-bg-active text-white font-bold rounded-2xl shadow-lg shadow-text-active/30 hover:shadow-xl hover:shadow-text-active/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center justify-center gap-2">
           {loading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -147,7 +161,11 @@ export default function LoginForm() {
 
         <div className="text-center pt-2">
           <p className="text-sm text-text-secondary">
-            Use <span className="text-text-active font-semibold">admin@ad.min</span> email and <span className="text-text-active font-semibold">admin</span> password to login.
+            Use{" "}
+            <span className="text-text-active font-semibold">admin@ad.min</span>{" "}
+            email and{" "}
+            <span className="text-text-active font-semibold">admin</span>{" "}
+            password to login.
           </p>
         </div>
       </form>
