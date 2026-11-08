@@ -15,13 +15,12 @@ class Generator:
         self,
         sql_instrc_file="./data/sql_generator_instruction.txt",
         text_instruction="./data/text_instruction.txt",
-        model="stepfun/step-3.5-flash:free",
         text_model_temperature=0.13
     ):
         self.sql_instruction = open(sql_instrc_file).read()
         self.text_instruction = open(text_instruction).read()
 
-        self.model = model
+        self.model = os.getenv("MODEL_NAME")
         self.text_model_temperature = text_model_temperature
         
         API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -233,6 +232,6 @@ class Generator:
                             "unique_values": int(series.nunique()),
                         }
         except Exception as e:
-            raise "Error while generation metadata, details: {}".format(e)
+            raise RuntimeError(f"Error while generating metadata, details: {e}")
             
         return metadata

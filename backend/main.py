@@ -7,20 +7,10 @@ from scripts.init_db import main as init_db_main
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    print("Checking and initializing database on startup...")
-    try:
-        init_db_main()
-    except Exception as e:
-        print(f"Failed to initialize database. Error message: {e}")
-    yield
-    print("Application shutdown")
 
 app = FastAPI(
     title="AI Database Analyzer",
     version="1.0.0",
-    lifespan=lifespan
 )
 
 app.add_middleware(
