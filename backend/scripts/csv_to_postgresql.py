@@ -34,8 +34,10 @@ from models.models import Base, Customer, Product, Order, OrderItem
 CSV_PATH  = os.path.join(project_dir, "data", "data.csv")
 # Change these credentials to match your PostgreSQL setup
 DB_URL    = os.environ.get("DATABASE_URL", "postgresql://postgres:1234@localhost:5432/ecommerce_db")
-# Strip quotes from DB_URL if any
-DB_URL = DB_URL.strip('"\'')
+# Strip quotes and normalize the scheme: SQLAlchemy has no "postgres" dialect.
+DB_URL = DB_URL.strip().strip('"\'')
+if DB_URL.startswith("postgres://"):
+    DB_URL = "postgresql://" + DB_URL[len("postgres://"):]
 RANDOM_SEED = 42
 
 random.seed(RANDOM_SEED)

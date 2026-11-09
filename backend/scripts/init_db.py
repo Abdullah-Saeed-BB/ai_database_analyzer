@@ -7,7 +7,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from models.models import User
-from db.session import engine
+from db.session import engine, normalize_database_url
 from src.auth import hash_password
 
 # Ensure python can find project module if run from the script directory
@@ -19,13 +19,7 @@ if project_dir not in sys.path:
 env_path = os.path.join(project_dir, ".env")
 load_dotenv(env_path)
 
-DB_URL = os.environ.get("DATABASE_URL")
-if not DB_URL:
-    print("Error: DATABASE_URL not found in .env")
-    sys.exit(1)
-
-# Clean quotes if any
-DB_URL = DB_URL.strip('"\'')
+DB_URL = normalize_database_url(os.environ.get("DATABASE_URL"))
 
 parsed_url = urlparse(DB_URL)
 target_db = parsed_url.path.lstrip('/')

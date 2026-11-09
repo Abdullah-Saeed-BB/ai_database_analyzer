@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from src.conversations import router as conversations_router
 from src.users import router as users_router
 from src.data import router as data_router
-from scripts.init_db import main as init_db_main
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
