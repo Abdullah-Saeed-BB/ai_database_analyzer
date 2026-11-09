@@ -11,16 +11,17 @@ Schema:
 import os
 import random
 import uuid
+import sys
 import pandas as pd
 import psycopg2
 from faker import Faker
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-import sys
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Ensure python can find project module if run from the script directory
+# Ensure python can find project modules if run from any directory.
+# This MUST happen before importing project modules (models, db, src).
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_dir = os.path.dirname(current_dir) # Go up only once, from scripts/ to project/
 if project_dir not in sys.path:
@@ -96,7 +97,9 @@ def build_products(df: pd.DataFrame) -> dict[str, Product]:
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
-def main():
+def main(db_url: str | None = None):
+    # Allow callers (e.g. init_db.py --global) to target another database.
+    engine = create_engine(db_url or DB_URL, echo=False)
     print("Reading CSV …")
     df = pd.read_csv(CSV_PATH, encoding="ISO-8859-1", dtype=str)
     print(f"  Loaded {len(df):,} rows.")
@@ -128,8 +131,6 @@ def main():
     print(f"  Unique products  : {len(products):,}")
 
     # Create DB
-    engine = create_engine(DB_URL, echo=False)
-    
     # Optional: ensure we can drop/create smoothly
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
