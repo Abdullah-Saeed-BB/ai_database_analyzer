@@ -38,6 +38,9 @@ DB_URL    = os.environ.get("DATABASE_URL", "postgresql://postgres:1234@localhost
 DB_URL = DB_URL.strip().strip('"\'')
 if DB_URL.startswith("postgres://"):
     DB_URL = "postgresql://" + DB_URL[len("postgres://"):]
+# Force psycopg2: SQLAlchemy 2.1 defaults bare postgresql:// URLs to psycopg 3.
+if DB_URL.startswith("postgresql://"):
+    DB_URL = "postgresql+psycopg2://" + DB_URL[len("postgresql://"):]
 RANDOM_SEED = 42
 
 random.seed(RANDOM_SEED)

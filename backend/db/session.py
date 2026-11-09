@@ -19,6 +19,10 @@ def normalize_database_url(raw_url: str | None) -> str:
     Passing the former raises:
         NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres
 
+    The scheme is also forced to the psycopg2 driver. SQLAlchemy 2.1 switched
+    bare ``postgresql://`` URLs to psycopg 3, which is not what this project
+    installs.
+
     Environment variables pasted into hosting dashboards also often keep
     surrounding quotes, so those are stripped as well.
     """
@@ -34,7 +38,14 @@ def normalize_database_url(raw_url: str | None) -> str:
     if url.startswith("postgres://"):
         url = "postgresql://" + url[len("postgres://"):]
 
-    if not url.startswith(("postgresql://", "postgresql+")):
+    # SQLAlchemy 2.1 changed the default driver for bare ``postgresql://``
+    # URLs to psycopg 3. This project ships psycopg2-binary, so force the
+    # psycopg2 driver explicitly instead of relying on the version default.
+    if url.startswith("postgresql://"):
+        url = "postgresql+psycopg2://" + url[len("postgresql://"):]
+    elif url.startswith("postgresql+psycopg://"):
+        url = "postgresql+psycopg2://" + url[len("postgresql+psycopg://"):]
+    elif not url.startswith("postgresql+psycopg2://"):
         scheme = url.split("://", 1)[0]
         raise RuntimeError(
             f"Unsupported DATABASE_URL scheme '{scheme}'. "
