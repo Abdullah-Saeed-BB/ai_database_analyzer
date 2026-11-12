@@ -107,3 +107,11 @@ If you wanna use other models from Ollama, just go to `backend/src/conversations
 generator = Generator(text_model="YOUR_TEXT_MODEL", sql_model="YOUR_SQL_MODEL")
 ```
 
+## Screenshots
+
+<img width="1920" height="1080" alt="AI answer countries orders" src="https://github.com/user-attachments/assets/2ffe6dda-8537-44ba-9ffc-bd22a6f1a5e6" />
+<img width="1920" height="977" alt="AI answer correlation question about database" src="https://github.com/user-attachments/assets/2d8cf5cd-44a3-4a37-80c3-c9573aab89f8" />
+<img width="1919" height="978" alt="AI get the last 3 orders" src="https://github.com/user-attachments/assets/25b9b6e4-255a-48cc-ba1b-4401d8980cf8" />
+<img width="1920" height="1080" alt="View charts of countries orders" src="https://github.com/user-attachments/assets/664324dd-735c-499c-95a7-299767683311" />
+<img width="1920" height="1080" alt="Ask AI analyzer page" src="https://github.com/user-attachments/assets/27c8f2d6-7d2d-4158-858a-56b4dc8a66f1" />
+
